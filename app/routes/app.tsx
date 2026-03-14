@@ -22,9 +22,9 @@ export default function App() {
     <AppProvider isEmbeddedApp apiKey={apiKey}>
       <NavMenu>
         <Link to="/app" rel="home">
-          Home
+          CSV一括登録
         </Link>
-        <Link to="/app/additional">Additional page</Link>
+        <Link to="/app/history">インポート履歴</Link>
       </NavMenu>
       <Outlet />
     </AppProvider>
