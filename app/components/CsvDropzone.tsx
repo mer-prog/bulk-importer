@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { DropZone, Banner, BlockStack, Text, List } from "@shopify/polaris";
+import { useTranslation } from "../i18n/i18nContext";
 
 interface CsvDropzoneProps {
   onFileParsed: (content: string, fileName: string) => void;
@@ -7,6 +8,7 @@ interface CsvDropzoneProps {
 }
 
 export function CsvDropzone({ onFileParsed, disabled }: CsvDropzoneProps) {
+  const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
 
@@ -15,7 +17,7 @@ export function CsvDropzone({ onFileParsed, disabled }: CsvDropzoneProps) {
       setError(null);
 
       if (rejectedFiles.length > 0) {
-        setError("CSVファイルのみアップロード可能です");
+        setError(t("dropzone.errorCsvOnly"));
         return;
       }
 
@@ -23,7 +25,7 @@ export function CsvDropzone({ onFileParsed, disabled }: CsvDropzoneProps) {
 
       const file = acceptedFiles[0];
       if (!file.name.endsWith(".csv")) {
-        setError("CSVファイルのみアップロード可能です");
+        setError(t("dropzone.errorCsvOnly"));
         return;
       }
 
@@ -37,11 +39,11 @@ export function CsvDropzone({ onFileParsed, disabled }: CsvDropzoneProps) {
         }
       };
       reader.onerror = () => {
-        setError("ファイルの読み込みに失敗しました");
+        setError(t("dropzone.errorReadFailed"));
       };
       reader.readAsText(file);
     },
-    [onFileParsed],
+    [onFileParsed, t],
   );
 
   return (
@@ -54,12 +56,12 @@ export function CsvDropzone({ onFileParsed, disabled }: CsvDropzoneProps) {
         disabled={disabled}
       >
         <DropZone.FileUpload
-          actionHint="CSVファイルをここにドラッグ＆ドロップ、またはクリックして選択"
+          actionHint={t("dropzone.actionHint")}
         />
       </DropZone>
       {fileName && !error && (
         <Text as="p" variant="bodySm" tone="subdued">
-          選択済み: {fileName}
+          {t("dropzone.selectedFile", { name: fileName })}
         </Text>
       )}
       {error && (

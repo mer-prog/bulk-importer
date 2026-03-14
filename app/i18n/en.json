@@ -1,0 +1,101 @@
+{
+  "app": {
+    "navHome": "CSV Bulk Import",
+    "navHistory": "Import History"
+  },
+  "index": {
+    "title": "CSV Bulk Product Import",
+    "uploadHeading": "Upload CSV File",
+    "previewHeading": "Preview",
+    "summaryProducts": "Products: {count}",
+    "summaryVariants": "Variants: {count}",
+    "summaryImages": "Images: {count}",
+    "resetButton": "Reset",
+    "importButton": "Start Import ({count} products)",
+    "viewResultButton": "View Import Results",
+    "errorNoCSV": "No CSV data provided",
+    "errorNoProducts": "No product data provided",
+    "errorImportFailed": "Import failed",
+    "errorInvalidRequest": "Invalid request"
+  },
+  "dropzone": {
+    "actionHint": "Drag & drop a CSV file here, or click to select",
+    "selectedFile": "Selected: {name}",
+    "errorCsvOnly": "Only CSV files are accepted",
+    "errorReadFailed": "Failed to read the file"
+  },
+  "preview": {
+    "resourceSingular": "product",
+    "resourcePlural": "products",
+    "validationErrorTitle": "{count} validation error(s)",
+    "rowError": "Row {row}: [{field}] {message}",
+    "moreErrors": "...and {count} more error(s)",
+    "headingRow": "Row",
+    "headingProductName": "Product Name",
+    "headingVendor": "Vendor",
+    "headingProductType": "Product Type",
+    "headingVariantCount": "Variants",
+    "headingImageCount": "Images",
+    "headingTags": "Tags"
+  },
+  "progress": {
+    "importing": "Importing products... ({current}/{total})",
+    "completeTitle": "Import Complete",
+    "successCount": "Success: {count}",
+    "failCount": "Failed: {count}",
+    "resultSeparator": " / ",
+    "errorTitle": "Import Error",
+    "errorMessage": "An error occurred during import"
+  },
+  "history": {
+    "title": "Import History",
+    "emptyHeading": "No import history",
+    "emptyDescription": "Upload a CSV file to import products, and the history will appear here.",
+    "resourceSingular": "job",
+    "resourcePlural": "jobs",
+    "headingDateTime": "Date/Time",
+    "headingFileName": "File Name",
+    "headingProductCount": "Products",
+    "headingVariantCount": "Variants",
+    "headingImageCount": "Images",
+    "headingSuccess": "Success",
+    "headingFail": "Failed",
+    "headingStatus": "Status",
+    "statusCompleted": "Completed",
+    "statusProcessing": "Processing",
+    "statusFailed": "Failed",
+    "statusPending": "Pending"
+  },
+  "historyDetail": {
+    "title": "Import Details",
+    "jobSummary": "Job Summary",
+    "labelStatus": "Status",
+    "labelProductCount": "Products",
+    "labelVariantCount": "Variants",
+    "labelImageCount": "Images",
+    "labelSuccess": "Success",
+    "labelFail": "Failed",
+    "productResults": "Results by Product",
+    "resourceSingular": "record",
+    "resourcePlural": "records",
+    "headingRow": "Row",
+    "headingProductName": "Product Name",
+    "headingProductId": "Product ID",
+    "headingVariantCount": "Variants",
+    "headingImageCount": "Images",
+    "headingStatus": "Status",
+    "headingError": "Error",
+    "statusSuccess": "Success",
+    "statusPartial": "Partial Success",
+    "statusError": "Error",
+    "statusCompleted": "Completed",
+    "statusProcessing": "Processing",
+    "statusFailed": "Failed",
+    "statusPending": "Pending"
+  },
+  "language": {
+    "label": "Language",
+    "en": "EN",
+    "ja": "JA"
+  }
+}

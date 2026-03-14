@@ -14,6 +14,7 @@ import {
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
+import { useTranslation } from "../i18n/i18nContext";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);
@@ -27,24 +28,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({ jobs });
 };
 
-function statusBadge(status: string) {
-  switch (status) {
-    case "completed":
-      return <Badge tone="success">完了</Badge>;
-    case "processing":
-      return <Badge tone="attention">処理中</Badge>;
-    case "failed":
-      return <Badge tone="critical">失敗</Badge>;
-    case "pending":
-      return <Badge>待機中</Badge>;
-    default:
-      return <Badge>{status}</Badge>;
-  }
-}
-
-function formatDate(dateStr: string) {
+function formatDate(dateStr: string, locale: string) {
   const date = new Date(dateStr);
-  return date.toLocaleString("ja-JP", {
+  return date.toLocaleString(locale === "ja" ? "ja-JP" : "en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -55,37 +41,56 @@ function formatDate(dateStr: string) {
 
 export default function HistoryPage() {
   const { jobs } = useLoaderData<typeof loader>();
+  const { t, locale } = useTranslation();
+
+  function statusBadge(status: string) {
+    switch (status) {
+      case "completed":
+        return <Badge tone="success">{t("history.statusCompleted")}</Badge>;
+      case "processing":
+        return <Badge tone="attention">{t("history.statusProcessing")}</Badge>;
+      case "failed":
+        return <Badge tone="critical">{t("history.statusFailed")}</Badge>;
+      case "pending":
+        return <Badge>{t("history.statusPending")}</Badge>;
+      default:
+        return <Badge>{status}</Badge>;
+    }
+  }
 
   return (
     <Page>
-      <TitleBar title="インポート履歴" />
+      <TitleBar title={t("history.title")} />
       <Layout>
         <Layout.Section>
           {jobs.length === 0 ? (
             <Card>
               <EmptyState
-                heading="インポート履歴がありません"
+                heading={t("history.emptyHeading")}
                 image=""
               >
                 <Text as="p" variant="bodyMd">
-                  CSVファイルをアップロードして商品をインポートすると、ここに履歴が表示されます。
+                  {t("history.emptyDescription")}
                 </Text>
               </EmptyState>
             </Card>
           ) : (
             <Card padding="0">
               <IndexTable
-                resourceName={{ singular: "ジョブ", plural: "ジョブ" }}
+                resourceName={{
+                  singular: t("history.resourceSingular"),
+                  plural: t("history.resourcePlural"),
+                }}
                 itemCount={jobs.length}
                 headings={[
-                  { title: "日時" },
-                  { title: "ファイル名" },
-                  { title: "商品数" },
-                  { title: "バリアント数" },
-                  { title: "画像数" },
-                  { title: "成功" },
-                  { title: "失敗" },
-                  { title: "ステータス" },
+                  { title: t("history.headingDateTime") },
+                  { title: t("history.headingFileName") },
+                  { title: t("history.headingProductCount") },
+                  { title: t("history.headingVariantCount") },
+                  { title: t("history.headingImageCount") },
+                  { title: t("history.headingSuccess") },
+                  { title: t("history.headingFail") },
+                  { title: t("history.headingStatus") },
                 ]}
                 selectable={false}
               >
@@ -94,7 +99,7 @@ export default function HistoryPage() {
                     <IndexTable.Cell>
                       <Link to={`/app/history/${job.id}`}>
                         <Text as="span" variant="bodyMd" fontWeight="bold">
-                          {formatDate(job.createdAt)}
+                          {formatDate(job.createdAt, locale)}
                         </Text>
                       </Link>
                     </IndexTable.Cell>

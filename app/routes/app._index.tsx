@@ -20,6 +20,7 @@ import type { ProductData, ValidationError } from "../services/csv-parser.server
 import { CsvDropzone } from "../components/CsvDropzone";
 import { PreviewTable } from "../components/PreviewTable";
 import { ImportProgress } from "../components/ImportProgress";
+import { useTranslation } from "../i18n/i18nContext";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticate.admin(request);
@@ -37,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const fileName = formData.get("fileName") as string;
 
     if (!csvText) {
-      return json({ error: "CSVデータがありません", intent: "parse" }, { status: 400 });
+      return json({ error: "NO_CSV", intent: "parse" }, { status: 400 });
     }
 
     const result = parseCsv(csvText);
@@ -55,7 +56,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const fileName = formData.get("fileName") as string;
 
     if (!productsJson) {
-      return json({ error: "商品データがありません", intent: "import" }, { status: 400 });
+      return json({ error: "NO_PRODUCTS", intent: "import" }, { status: 400 });
     }
 
     try {
@@ -71,15 +72,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     } catch (error) {
       return json({
         intent: "import",
-        error: error instanceof Error ? error.message : "インポートに失敗しました",
+        error: error instanceof Error ? error.message : "IMPORT_FAILED",
       }, { status: 500 });
     }
   }
 
-  return json({ error: "不正なリクエスト" }, { status: 400 });
+  return json({ error: "INVALID_REQUEST" }, { status: 400 });
 };
 
 export default function Index() {
+  const { t } = useTranslation();
   const fetcher = useFetcher<typeof action>();
   const [csvText, setCsvText] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>("");
@@ -172,14 +174,14 @@ export default function Index() {
 
   return (
     <Page>
-      <TitleBar title="CSV商品一括登録" />
+      <TitleBar title={t("index.title")} />
       <BlockStack gap="500">
         <Layout>
           <Layout.Section>
             <Card>
               <BlockStack gap="400">
                 <Text as="h2" variant="headingMd">
-                  CSVファイルをアップロード
+                  {t("index.uploadHeading")}
                 </Text>
                 <CsvDropzone
                   onFileParsed={handleFileParsed}
@@ -196,11 +198,11 @@ export default function Index() {
                   <BlockStack gap="400">
                     <InlineStack align="space-between">
                       <Text as="h2" variant="headingMd">
-                        プレビュー
+                        {t("index.previewHeading")}
                       </Text>
                       <InlineStack gap="200">
                         <Text as="span" variant="bodySm" tone="subdued">
-                          商品: {products.length}件 / バリアント: {totalVariants}件 / 画像: {totalImages}枚
+                          {t("index.summaryProducts", { count: products.length })} / {t("index.summaryVariants", { count: totalVariants })} / {t("index.summaryImages", { count: totalImages })}
                         </Text>
                       </InlineStack>
                     </InlineStack>
@@ -212,7 +214,7 @@ export default function Index() {
               <Layout.Section>
                 <InlineStack gap="300" align="end">
                   <Button onClick={handleReset} disabled={isLoading}>
-                    リセット
+                    {t("index.resetButton")}
                   </Button>
                   <Button
                     variant="primary"
@@ -220,7 +222,7 @@ export default function Index() {
                     loading={isLoading && fetcher.formData?.get("intent") === "import"}
                     disabled={products.length === 0 || isLoading}
                   >
-                    {`インポート開始 (${products.length}商品)`}
+                    {t("index.importButton", { count: products.length })}
                   </Button>
                 </InlineStack>
               </Layout.Section>
@@ -250,7 +252,7 @@ export default function Index() {
             {importResult && "jobId" in importResult && (
               <Box paddingBlockStart="300">
                 <Button url={`/app/history/${importResult.jobId}`}>
-                  インポート結果を確認
+                  {t("index.viewResultButton")}
                 </Button>
               </Box>
             )}

@@ -16,6 +16,7 @@ import {
 import { TitleBar } from "@shopify/app-bridge-react";
 import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
+import { useTranslation } from "../i18n/i18nContext";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);
@@ -37,37 +38,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   return json({ job });
 };
 
-function statusBadge(status: string) {
-  switch (status) {
-    case "success":
-      return <Badge tone="success">成功</Badge>;
-    case "partial":
-      return <Badge tone="warning">部分成功</Badge>;
-    case "error":
-      return <Badge tone="critical">エラー</Badge>;
-    default:
-      return <Badge>{status}</Badge>;
-  }
-}
-
-function jobStatusBadge(status: string) {
-  switch (status) {
-    case "completed":
-      return <Badge tone="success">完了</Badge>;
-    case "processing":
-      return <Badge tone="attention">処理中</Badge>;
-    case "failed":
-      return <Badge tone="critical">失敗</Badge>;
-    case "pending":
-      return <Badge>待機中</Badge>;
-    default:
-      return <Badge>{status}</Badge>;
-  }
-}
-
-function formatDate(dateStr: string) {
+function formatDate(dateStr: string, locale: string) {
   const date = new Date(dateStr);
-  return date.toLocaleString("ja-JP", {
+  return date.toLocaleString(locale === "ja" ? "ja-JP" : "en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -79,32 +52,61 @@ function formatDate(dateStr: string) {
 
 export default function HistoryDetailPage() {
   const { job } = useLoaderData<typeof loader>();
+  const { t, locale } = useTranslation();
+
+  function statusBadge(status: string) {
+    switch (status) {
+      case "success":
+        return <Badge tone="success">{t("historyDetail.statusSuccess")}</Badge>;
+      case "partial":
+        return <Badge tone="warning">{t("historyDetail.statusPartial")}</Badge>;
+      case "error":
+        return <Badge tone="critical">{t("historyDetail.statusError")}</Badge>;
+      default:
+        return <Badge>{status}</Badge>;
+    }
+  }
+
+  function jobStatusBadge(status: string) {
+    switch (status) {
+      case "completed":
+        return <Badge tone="success">{t("historyDetail.statusCompleted")}</Badge>;
+      case "processing":
+        return <Badge tone="attention">{t("historyDetail.statusProcessing")}</Badge>;
+      case "failed":
+        return <Badge tone="critical">{t("historyDetail.statusFailed")}</Badge>;
+      case "pending":
+        return <Badge>{t("historyDetail.statusPending")}</Badge>;
+      default:
+        return <Badge>{status}</Badge>;
+    }
+  }
 
   return (
     <Page
       backAction={{ url: "/app/history" }}
       title={job.fileName}
-      subtitle={formatDate(job.createdAt)}
+      subtitle={formatDate(job.createdAt, locale)}
     >
-      <TitleBar title="インポート詳細" />
+      <TitleBar title={t("historyDetail.title")} />
       <BlockStack gap="500">
         <Layout>
           <Layout.Section>
             <Card>
               <BlockStack gap="300">
                 <Text as="h2" variant="headingMd">
-                  ジョブ概要
+                  {t("historyDetail.jobSummary")}
                 </Text>
                 <InlineStack gap="800">
                   <BlockStack gap="100">
                     <Text as="span" variant="bodySm" tone="subdued">
-                      ステータス
+                      {t("historyDetail.labelStatus")}
                     </Text>
                     {jobStatusBadge(job.status)}
                   </BlockStack>
                   <BlockStack gap="100">
                     <Text as="span" variant="bodySm" tone="subdued">
-                      商品数
+                      {t("historyDetail.labelProductCount")}
                     </Text>
                     <Text as="span" variant="bodyMd" fontWeight="bold">
                       {job.totalProducts}
@@ -112,7 +114,7 @@ export default function HistoryDetailPage() {
                   </BlockStack>
                   <BlockStack gap="100">
                     <Text as="span" variant="bodySm" tone="subdued">
-                      バリアント数
+                      {t("historyDetail.labelVariantCount")}
                     </Text>
                     <Text as="span" variant="bodyMd" fontWeight="bold">
                       {job.totalVariants}
@@ -120,7 +122,7 @@ export default function HistoryDetailPage() {
                   </BlockStack>
                   <BlockStack gap="100">
                     <Text as="span" variant="bodySm" tone="subdued">
-                      画像数
+                      {t("historyDetail.labelImageCount")}
                     </Text>
                     <Text as="span" variant="bodyMd" fontWeight="bold">
                       {job.totalImages}
@@ -128,7 +130,7 @@ export default function HistoryDetailPage() {
                   </BlockStack>
                   <BlockStack gap="100">
                     <Text as="span" variant="bodySm" tone="subdued">
-                      成功
+                      {t("historyDetail.labelSuccess")}
                     </Text>
                     <Text as="span" variant="bodyMd" fontWeight="bold" tone="success">
                       {job.successCount}
@@ -136,7 +138,7 @@ export default function HistoryDetailPage() {
                   </BlockStack>
                   <BlockStack gap="100">
                     <Text as="span" variant="bodySm" tone="subdued">
-                      失敗
+                      {t("historyDetail.labelFail")}
                     </Text>
                     <Text as="span" variant="bodyMd" fontWeight="bold" tone="critical">
                       {job.failCount}
@@ -151,21 +153,24 @@ export default function HistoryDetailPage() {
             <Card padding="0">
               <Box padding="400" paddingBlockEnd="0">
                 <Text as="h2" variant="headingMd">
-                  商品別結果
+                  {t("historyDetail.productResults")}
                 </Text>
               </Box>
               <Box paddingBlockStart="400">
                 <IndexTable
-                  resourceName={{ singular: "レコード", plural: "レコード" }}
+                  resourceName={{
+                    singular: t("historyDetail.resourceSingular"),
+                    plural: t("historyDetail.resourcePlural"),
+                  }}
                   itemCount={job.records.length}
                   headings={[
-                    { title: "行" },
-                    { title: "商品名" },
-                    { title: "商品ID" },
-                    { title: "バリアント数" },
-                    { title: "画像数" },
-                    { title: "ステータス" },
-                    { title: "エラー" },
+                    { title: t("historyDetail.headingRow") },
+                    { title: t("historyDetail.headingProductName") },
+                    { title: t("historyDetail.headingProductId") },
+                    { title: t("historyDetail.headingVariantCount") },
+                    { title: t("historyDetail.headingImageCount") },
+                    { title: t("historyDetail.headingStatus") },
+                    { title: t("historyDetail.headingError") },
                   ]}
                   selectable={false}
                 >

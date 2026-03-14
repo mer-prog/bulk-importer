@@ -8,6 +8,7 @@ import {
   Card,
 } from "@shopify/polaris";
 import type { ProductData, ValidationError } from "../services/csv-parser.server";
+import { useTranslation } from "../i18n/i18nContext";
 
 interface PreviewTableProps {
   products: ProductData[];
@@ -15,23 +16,25 @@ interface PreviewTableProps {
 }
 
 export function PreviewTable({ products, errors }: PreviewTableProps) {
+  const { t } = useTranslation();
+
   const resourceName = {
-    singular: "商品",
-    plural: "商品",
+    singular: t("preview.resourceSingular"),
+    plural: t("preview.resourcePlural"),
   };
 
   return (
     <BlockStack gap="400">
       {errors.length > 0 && (
-        <Banner tone="warning" title={`${errors.length}件のバリデーションエラー`}>
+        <Banner tone="warning" title={t("preview.validationErrorTitle", { count: errors.length })}>
           <List>
             {errors.slice(0, 10).map((error, i) => (
               <List.Item key={i}>
-                行{error.rowNumber}: [{error.field}] {error.message}
+                {t("preview.rowError", { row: error.rowNumber, field: error.field, message: error.message })}
               </List.Item>
             ))}
             {errors.length > 10 && (
-              <List.Item>...他{errors.length - 10}件のエラー</List.Item>
+              <List.Item>{t("preview.moreErrors", { count: errors.length - 10 })}</List.Item>
             )}
           </List>
         </Banner>
@@ -43,13 +46,13 @@ export function PreviewTable({ products, errors }: PreviewTableProps) {
             resourceName={resourceName}
             itemCount={products.length}
             headings={[
-              { title: "行" },
-              { title: "商品名" },
-              { title: "ベンダー" },
-              { title: "商品タイプ" },
-              { title: "バリアント数" },
-              { title: "画像数" },
-              { title: "タグ" },
+              { title: t("preview.headingRow") },
+              { title: t("preview.headingProductName") },
+              { title: t("preview.headingVendor") },
+              { title: t("preview.headingProductType") },
+              { title: t("preview.headingVariantCount") },
+              { title: t("preview.headingImageCount") },
+              { title: t("preview.headingTags") },
             ]}
             selectable={false}
           >

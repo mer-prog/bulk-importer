@@ -1,4 +1,5 @@
 import { ProgressBar, BlockStack, Text, Banner, Box } from "@shopify/polaris";
+import { useTranslation } from "../i18n/i18nContext";
 
 interface ImportProgressProps {
   phase: "idle" | "importing" | "complete" | "error";
@@ -16,6 +17,8 @@ export function ImportProgress({
   successCount = 0,
   failCount = 0,
 }: ImportProgressProps) {
+  const { t } = useTranslation();
+
   if (phase === "idle") return null;
 
   const progress =
@@ -29,7 +32,7 @@ export function ImportProgress({
         <Box>
           <BlockStack gap="200">
             <Text as="p" variant="bodyMd">
-              商品を登録中... ({currentProduct}/{totalProducts})
+              {t("progress.importing", { current: currentProduct, total: totalProducts })}
             </Text>
             <ProgressBar progress={progress} size="small" />
           </BlockStack>
@@ -39,20 +42,20 @@ export function ImportProgress({
       {phase === "complete" && (
         <Banner
           tone={failCount > 0 ? "warning" : "success"}
-          title="インポート完了"
+          title={t("progress.completeTitle")}
         >
           <BlockStack gap="100">
             <Text as="p" variant="bodyMd">
-              成功: {successCount}件 / 失敗: {failCount}件
+              {t("progress.successCount", { count: successCount })}{t("progress.resultSeparator")}{t("progress.failCount", { count: failCount })}
             </Text>
           </BlockStack>
         </Banner>
       )}
 
       {phase === "error" && (
-        <Banner tone="critical" title="インポートエラー">
+        <Banner tone="critical" title={t("progress.errorTitle")}>
           <Text as="p" variant="bodyMd">
-            インポート処理中にエラーが発生しました
+            {t("progress.errorMessage")}
           </Text>
         </Banner>
       )}

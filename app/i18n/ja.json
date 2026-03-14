@@ -1,0 +1,101 @@
+{
+  "app": {
+    "navHome": "CSV一括登録",
+    "navHistory": "インポート履歴"
+  },
+  "index": {
+    "title": "CSV商品一括登録",
+    "uploadHeading": "CSVファイルをアップロード",
+    "previewHeading": "プレビュー",
+    "summaryProducts": "商品: {count}件",
+    "summaryVariants": "バリアント: {count}件",
+    "summaryImages": "画像: {count}枚",
+    "resetButton": "リセット",
+    "importButton": "インポート開始 ({count}商品)",
+    "viewResultButton": "インポート結果を確認",
+    "errorNoCSV": "CSVデータがありません",
+    "errorNoProducts": "商品データがありません",
+    "errorImportFailed": "インポートに失敗しました",
+    "errorInvalidRequest": "不正なリクエスト"
+  },
+  "dropzone": {
+    "actionHint": "CSVファイルをここにドラッグ＆ドロップ、またはクリックして選択",
+    "selectedFile": "選択済み: {name}",
+    "errorCsvOnly": "CSVファイルのみアップロード可能です",
+    "errorReadFailed": "ファイルの読み込みに失敗しました"
+  },
+  "preview": {
+    "resourceSingular": "商品",
+    "resourcePlural": "商品",
+    "validationErrorTitle": "{count}件のバリデーションエラー",
+    "rowError": "行{row}: [{field}] {message}",
+    "moreErrors": "...他{count}件のエラー",
+    "headingRow": "行",
+    "headingProductName": "商品名",
+    "headingVendor": "ベンダー",
+    "headingProductType": "商品タイプ",
+    "headingVariantCount": "バリアント数",
+    "headingImageCount": "画像数",
+    "headingTags": "タグ"
+  },
+  "progress": {
+    "importing": "商品を登録中... ({current}/{total})",
+    "completeTitle": "インポート完了",
+    "successCount": "成功: {count}件",
+    "failCount": "失敗: {count}件",
+    "resultSeparator": " / ",
+    "errorTitle": "インポートエラー",
+    "errorMessage": "インポート処理中にエラーが発生しました"
+  },
+  "history": {
+    "title": "インポート履歴",
+    "emptyHeading": "インポート履歴がありません",
+    "emptyDescription": "CSVファイルをアップロードして商品をインポートすると、ここに履歴が表示されます。",
+    "resourceSingular": "ジョブ",
+    "resourcePlural": "ジョブ",
+    "headingDateTime": "日時",
+    "headingFileName": "ファイル名",
+    "headingProductCount": "商品数",
+    "headingVariantCount": "バリアント数",
+    "headingImageCount": "画像数",
+    "headingSuccess": "成功",
+    "headingFail": "失敗",
+    "headingStatus": "ステータス",
+    "statusCompleted": "完了",
+    "statusProcessing": "処理中",
+    "statusFailed": "失敗",
+    "statusPending": "待機中"
+  },
+  "historyDetail": {
+    "title": "インポート詳細",
+    "jobSummary": "ジョブ概要",
+    "labelStatus": "ステータス",
+    "labelProductCount": "商品数",
+    "labelVariantCount": "バリアント数",
+    "labelImageCount": "画像数",
+    "labelSuccess": "成功",
+    "labelFail": "失敗",
+    "productResults": "商品別結果",
+    "resourceSingular": "レコード",
+    "resourcePlural": "レコード",
+    "headingRow": "行",
+    "headingProductName": "商品名",
+    "headingProductId": "商品ID",
+    "headingVariantCount": "バリアント数",
+    "headingImageCount": "画像数",
+    "headingStatus": "ステータス",
+    "headingError": "エラー",
+    "statusSuccess": "成功",
+    "statusPartial": "部分成功",
+    "statusError": "エラー",
+    "statusCompleted": "完了",
+    "statusProcessing": "処理中",
+    "statusFailed": "失敗",
+    "statusPending": "待機中"
+  },
+  "language": {
+    "label": "言語",
+    "en": "EN",
+    "ja": "JA"
+  }
+}
