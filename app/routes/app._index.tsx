@@ -220,7 +220,7 @@ export default function Index() {
                     loading={isLoading && fetcher.formData?.get("intent") === "import"}
                     disabled={products.length === 0 || isLoading}
                   >
-                    インポート開始 ({products.length}商品)
+                    {`インポート開始 (${products.length}商品)`}
                   </Button>
                 </InlineStack>
               </Layout.Section>
