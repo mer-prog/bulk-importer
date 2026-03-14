@@ -32,3 +32,33 @@ model Session {
   refreshToken        String?
   refreshTokenExpires DateTime?
 }
+
+model ImportJob {
+  id             String         @id @default(cuid())
+  shop           String
+  fileName       String
+  totalRows      Int
+  totalProducts  Int            @default(0)
+  totalVariants  Int            @default(0)
+  totalImages    Int            @default(0)
+  successCount   Int            @default(0)
+  failCount      Int            @default(0)
+  imageFailCount Int            @default(0)
+  status         String         @default("pending") // pending | processing | completed | failed
+  createdAt      DateTime       @default(now())
+  records        ImportRecord[]
+}
+
+model ImportRecord {
+  id           String    @id @default(cuid())
+  jobId        String
+  job          ImportJob @relation(fields: [jobId], references: [id])
+  rowNumber    Int
+  productTitle String    @default("")
+  productId    String?
+  variantCount Int       @default(0)
+  imageCount   Int       @default(0)
+  status       String    // success | partial | error
+  errorMsg     String?
+  createdAt    DateTime  @default(now())
+}
